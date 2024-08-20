@@ -43,7 +43,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	http_server.Handler = opts.Mux
 
-	sigint := make(chan bool)
+	done_ch := make(chan bool)
 	err_ch := make(chan error)
 
 	go func() {
@@ -52,17 +52,20 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		signal.Notify(sigint, os.Interrupt)
 		<-sigint
 
-		slog.Info("Shutting server down")
+		slog.Info("Received interupt signal, shutting server down")
 		err := http_server.Shutdown(ctx)
 
 		if err != nil {
 			slog.Error("HTTP server shutdown error", "error", err)
 		}
 
+		slog.Debug("Close done channel")
+		close(done_ch)
 	}()
 
 	go func() {
 
+		slog.Debug("Start server")
 		err := http_server.ListenAndServe()
 
 		if err != nil {
@@ -106,11 +109,12 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	err := opts.Browser.OpenURL(ctx, url)
 
 	if err != nil {
-		log.Fatalf("Failed to open URL %s, %v", url, err)
+		return fmt.Errorf("Failed to open URL %s, %w", url, err)
 	}
 
-	log.Printf("Features are viewable at %s\n", url)
-	<-sigint
+	slog.Info("Server is ready and features are viewable", "url", url)
+	<-done_ch
 
+	slog.Debug("Exiting")
 	return nil
 }
