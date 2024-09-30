@@ -5,7 +5,7 @@ package show
 import (
 	"context"
 	"fmt"
-	_ "log/slog"
+	"log/slog"
 	"net/url"
 	"strconv"
 
@@ -91,7 +91,12 @@ func (br *WebKitBrowser) OpenURL(ctx context.Context, url string) error {
 		return fmt.Errorf("URL is empty")
 	}
 
+	slog.Info("Open", "url", url)
+	
 	launch_url := func(app appkit.Application, delegate *appkit.ApplicationDelegate) {
+
+		slog.Info("Launch", "url", url)
+		
 		w := appkit.NewWindowWithSize(br.width, br.height)
 		objc.Retain(&w)
 
@@ -121,7 +126,10 @@ func (br *WebKitBrowser) OpenURL(ctx context.Context, url string) error {
 
 	}
 
+	slog.Info("Run", "url", url)
 	macos.RunApp(launch_url)
+
+	slog.Info("Done", "url", url)
 	return nil
 
 	macos.RunApp(func(app appkit.Application, delegate *appkit.ApplicationDelegate) {
