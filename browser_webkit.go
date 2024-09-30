@@ -5,6 +5,7 @@ package show
 import (
 	"context"
 	"fmt"
+	_ "log/slog"
 	"net/url"
 	"strconv"
 
@@ -90,7 +91,41 @@ func (br *WebKitBrowser) OpenURL(ctx context.Context, url string) error {
 		return fmt.Errorf("URL is empty")
 	}
 
+	launch_url := func(app appkit.Application, delegate *appkit.ApplicationDelegate) {
+		w := appkit.NewWindowWithSize(br.width, br.height)
+		objc.Retain(&w)
+
+		configuration := webkit.NewWebViewConfiguration()
+
+		view := webkit.NewWebViewWithFrameConfiguration(foundation.Rect{}, configuration)
+
+		/*
+		webkit.AddScriptMessageHandlerWithReply(view, "greet", func(message objc.Object) (objc.Object, error) {
+			param := message.Description()
+			fmt.Println("greet handled")
+			return foundation.NewStringWithString("hello: " + param).Object, nil
+		})
+		*/
+		
+		w.SetContentView(view)
+		w.MakeKeyAndOrderFront(nil)
+		w.Center()
+
+		webkit.LoadURL(view, url)
+
+		delegate.SetApplicationShouldTerminateAfterLastWindowClosed(func(appkit.Application) bool {
+			return true
+		})
+		app.SetActivationPolicy(appkit.ApplicationActivationPolicyRegular)
+		app.ActivateIgnoringOtherApps(true)
+
+	}
+
+	macos.RunApp(launch_url)
+	return nil
+
 	macos.RunApp(func(app appkit.Application, delegate *appkit.ApplicationDelegate) {
+
 		app.SetActivationPolicy(appkit.ApplicationActivationPolicyRegular)
 		app.ActivateIgnoringOtherApps(true)
 
@@ -106,6 +141,7 @@ func (br *WebKitBrowser) OpenURL(ctx context.Context, url string) error {
 		w := appkit.NewWindowWithContentRectStyleMaskBackingDefer(frame,
 			appkit.ClosableWindowMask|appkit.TitledWindowMask,
 			appkit.BackingStoreBuffered, false)
+
 		objc.Retain(&w)
 		w.SetContentView(wv)
 		w.MakeKeyAndOrderFront(w)

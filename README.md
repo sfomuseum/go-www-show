@@ -33,6 +33,8 @@ func main() {
 }
 ```
 
+For a complete working example see the [sfomuseum/go-geojson-show](https://github.com/sfomuseum/go-geojson-show/blob/main/show.go) package.
+
 ## Browsers
 
 This package defines a `Browser` interface for opening URLs.
@@ -47,4 +49,6 @@ Open URLs in a new window using the operating system's default web browser.
 $> go build -mod vendor -tags webkit -ldflags="-s -w" -o bin/show cmd/show/main.go
 ```
 
-For a complete working example see the [sfomuseum/go-geojson-show](https://github.com/sfomuseum/go-geojson-show/blob/main/show.go) package.
+```
+$> ./bin/show -browser-uri 'webkit://?width=500' -url https://aaronland.info
+```
