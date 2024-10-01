@@ -77,7 +77,32 @@ browser, _ = show.NewBrowser(ctx, "webview://?width=500&height=700")
 Applications requiring the `WebViewBrowser` implementation will need to be built with the `webview` tag. For example:
 
 ```
-$> go build -mod vendor -tags webview -ldflags="-s -w" -o bin/show cmd/show/main.go
+$> go build -mod vendor -tags webview -ldflags="-s -w" -o bin/show-url cmd/show-url/main.go
+```
+
+## Tools
+
+```
+$> make cli
+go build -mod vendor -ldflags="-s -w" -o bin/show-url cmd/show-url/main.go
+```
+
+_Note that the default `cli` Makefile target does not build tools with the `webview` tag enabled._
+
+### show-url
+
+Open a URL in a sfomuseum/go-www-show/v2.Browser environment.
+
+```
+$> ./bin/show-url -h
+Open a URL in a sfomuseum/go-www-show/v2.Browser environment.
+Usage:
+	 ./bin/show-url [options]
+Valid options are:
+  -browser-uri string
+    	A valid sfomuseum/go-www-show/v2.Browser URI. Valid options are: web:// (default "web://")
+  -url string
+    	The URL to open
 ```
 
 ## See also
