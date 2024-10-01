@@ -20,14 +20,13 @@ func main() {
 
 	ctx := context.Background()
 
-	done_ch := make(chan bool)
-
 	br, err := show.NewBrowser(ctx, browser_uri)
 
 	if err != nil {
 		log.Fatalf("Failed to create new browser, %w", err)
 	}
 
+	done_ch := make(chan bool)	
 	err = br.OpenURL(ctx, url, done_ch)
 
 	if err != nil {
