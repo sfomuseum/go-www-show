@@ -1,6 +1,6 @@
 # go-www-show
 
-Go package for starting a local	webserver and then opening its URL in a target source once it (the web server) is running.
+Go package for starting a local	webserver and then opening its URL in a target environment once it (the web server) is running.
 
 ## Usage
 
@@ -35,15 +35,50 @@ func main() {
 
 _For a complete working example see the [sfomuseum/go-geojson-show](https://github.com/sfomuseum/go-geojson-show/blob/main/show.go) package._
 
-## Browsers
+## Browsers (targets)
 
-This package defines a `Browser` interface for opening URLs.
+This package defines a `Browser` interface for opening URLs in or more target environments.
 
-### web://
+```
+// Browser is an interface for rendering URLs.
+type Browser interface {
+	// OpenURL opens a given in a URL specific to the browser's implementation context. The method expects
+	// a URL to open and a channel that can be used (optionally) to signal when the specific `Browser`
+	// implementation exits or otherwise triggers a "completed" state.
+	OpenURL(context.Context, string, chan bool) error
+}
+```
 
-Currently there is only a single implementation (`web`) for opening URLs in the operating system's default web browser. In the future there may be other implementations to "open" a URL by delivering it to a remote service that handles opening and displaying that URL.
+The following implementations are available when using this package:
 
-### webview://
+### WebBrowser (web://)
+
+Open URLs in the operating system's default web browser. The `WebBrowser` implementation can be instantiated like this:
+
+```
+browser, _ := show.NewBrowser(ctx, "web://")
+```
+
+### WebViewBrowser (webview://)
+
+Open URLs in a dedicated application window using the [webview/webview_go](https://github.com/webview/webview_go) package. The `WebViewBrowsr` implementation can be instantiated like this:
+
+```
+browser, _ = show.NewBrowser(ctx, "webview://?width=500&height=700")
+```
+
+#### Parameters
+
+| Name | Value | Required | Notes |
+| --- | --- | --- | --- |
+| width | int | no | The initial width of the webview window. Default is 1024. |
+| height | int | no | The initial height of the webview window. Default is 1024. |
+
+Applications requiring the `WebViewBrowser` implementation will need to be built with the `webview` tag. For example:
+
+```
+$> go build -mod vendor -tags webview -ldflags="-s -w" -o bin/show cmd/show/main.go
+```
 
 ## See also
 

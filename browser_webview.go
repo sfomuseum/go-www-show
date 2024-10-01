@@ -13,6 +13,9 @@ import (
 	"github.com/webview/webview_go"
 )
 
+const WEBVIEW_DEFAULT_WIDTH int = 1024
+const WEBVIEW_DEFAULT_HEIGHT int = 800
+
 // WebviewBrowser implements the `Browser` interface for loading URLs in a Webview-based WebView window.
 type WebviewBrowser struct {
 	Browser
@@ -48,8 +51,8 @@ func NewWebviewBrowser(ctx context.Context, uri string) (Browser, error) {
 
 	q := u.Query()
 
-	width := 1024
-	height := 800
+	width := WEBVIEW_DEFAULT_WIDTH
+	height := WEBVIEW_DEFAULT_HEIGHT
 
 	if q.Has("width") {
 
