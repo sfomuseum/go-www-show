@@ -45,4 +45,7 @@ Currently there is only a single implementation (`web`) for opening URLs in the 
 
 ### webview://
 
+## See also
 
+* https://github.com/pkg/browser
+* https://github.com/webview/webview_go
