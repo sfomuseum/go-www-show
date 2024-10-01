@@ -1,4 +1,4 @@
-module github.com/sfomuseum/go-www-show
+module github.com/sfomuseum/go-www-show/v2
 
 go 1.23.0
 

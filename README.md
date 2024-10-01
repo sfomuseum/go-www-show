@@ -11,7 +11,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/sfomuseum/go-www-show"
+	"github.com/sfomuseum/go-www-show/v2"
 )
 
 func main() {
@@ -33,6 +33,16 @@ func main() {
 }
 ```
 
-This package defines a `Browser` interface for opening URLs. Currently there is only a single implementation (`web`) for opening URLs in the operating system's default web browser. In the future there may be other implementations to "open" a URL by delivering it to a remote service that handles opening and displaying that URL.
+_For a complete working example see the [sfomuseum/go-geojson-show](https://github.com/sfomuseum/go-geojson-show/blob/main/show.go) package._
 
-For a complete working example see the [sfomuseum/go-geojson-show](https://github.com/sfomuseum/go-geojson-show/blob/main/show.go) package.
+## Browsers
+
+This package defines a `Browser` interface for opening URLs.
+
+### web://
+
+Currently there is only a single implementation (`web`) for opening URLs in the operating system's default web browser. In the future there may be other implementations to "open" a URL by delivering it to a remote service that handles opening and displaying that URL.
+
+### webview://
+
+

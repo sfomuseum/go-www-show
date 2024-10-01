@@ -5,7 +5,6 @@ package show
 import (
 	"context"
 	"fmt"
-	"log/slog"
 	"net/url"
 	"strconv"
 
@@ -81,16 +80,19 @@ func NewWebviewBrowser(ctx context.Context, uri string) (Browser, error) {
 }
 
 // OpenURL opens 'url' in a Webview-based WebView window.
-func (br *WebviewBrowser) OpenURL(ctx context.Context, url string) error {
+func (br *WebviewBrowser) OpenURL(ctx context.Context, url string, done_ch chan bool) error {
 
-	slog.Info("Open", "url", url)
-	
+	defer func() {
+		done_ch <- true
+	}()
+
 	w := webview.New(false)
 	defer w.Destroy()
 
+	w.SetTitle(url)
 	w.SetSize(br.width, br.height, webview.HintNone)
 	w.Navigate(url)
 	w.Run()
-	
+
 	return nil
 }

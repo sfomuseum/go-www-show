@@ -5,7 +5,7 @@ import (
 	"flag"
 	"log"
 
-	"github.com/sfomuseum/go-www-show"
+	"github.com/sfomuseum/go-www-show/v2"
 )
 
 func main() {
@@ -20,13 +20,15 @@ func main() {
 
 	ctx := context.Background()
 
+	done_ch := make(chan bool)
+
 	br, err := show.NewBrowser(ctx, browser_uri)
 
 	if err != nil {
 		log.Fatalf("Failed to create new browser, %w", err)
 	}
 
-	err = br.OpenURL(ctx, url)
+	err = br.OpenURL(ctx, url, done_ch)
 
 	if err != nil {
 		log.Fatalf("Failed to open URL, %w", err)
