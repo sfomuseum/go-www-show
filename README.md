@@ -61,7 +61,7 @@ browser, _ := show.NewBrowser(ctx, "web://")
 
 ### WebViewBrowser (webview://)
 
-Open URLs in a dedicated application window using the [webview/webview_go](https://github.com/webview/webview_go) package. The `WebViewBrowsr` implementation can be instantiated like this:
+Open URLs in a dedicated application window using the [webview/webview_go](https://github.com/webview/webview_go) package. The `WebViewBrowser` implementation can be instantiated like this:
 
 ```
 browser, _ = show.NewBrowser(ctx, "webview://?width=500&height=700")
