@@ -1,6 +1,6 @@
 module github.com/sfomuseum/go-www-show/v2
 
-go 1.23.0
+go 1.25.0
 
 require (
 	github.com/aaronland/go-roster v1.0.0
